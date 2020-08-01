@@ -1,0 +1,650 @@
+<base href="{{ HTTPS_SERVER }}">
+<meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="catalog/view/javascript/jquery/jquery-2.1.1.min.js" type="text/javascript"></script>
+<link href="catalog/view/javascript/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+<script src="catalog/view/javascript/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<link href="catalog/view/stylesheet/spinwin/css/spin_wheel.css" rel="stylesheet" media="screen" />
+<link href="catalog/view/stylesheet/spinwin/css/tooltipster.css" rel="stylesheet" media="screen" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Baloo+Bhaijaan|Merriweather|Roboto|Acme|Bree+Serif|Cinzel|Gloria+Hallelujah|Indie+Flower|Pacifico" type="text/css" media="all" />
+  {% set theme =setting.spinwin_theme %}
+  {% set path_route = route|split('/') %}
+  {% set show_pop = 1 %}
+  {% set spinwin_when_display = 1 %}
+  
+  
+  <script>   
+   var show_pull_out = 1;
+   var email_recheck_spinwin = '{{setting.spinwin_recheck}}';
+   var wheel_device = '320_480'; 
+   var email_check_spinwin ='{{email_check}}';
+   var time_display = "";
+   var scroll_display = "";
+   var exit_display = false;
+   var hide_after_spinwin = 0;
+   var min_screen_size_spinwin = '320_480';
+   var copy_msg = "{{code_copied}}"; 
+   var device_type = "{{device_type}}"; 
+   var display_interval_spinwin = 0;
+   var display_option_spinwin ={{setting.spinwin_email_setting}};
+   var show_fireworks ={{setting.spinwin_show_firework}}; 
+   var spin_wheel_front_path = "index.php?route=extension/module/spin_win/generate_coupon";
+   var spin_wheel_front_path1 = "index.php?route=extension/module/spin_win/email_check";
+   var spin_wheel_front_path2 = "index.php?route=extension/module/spin_win/send_email";
+   var email_only_msg_spinwin ="{{coupon_sent}}";
+   var wheel_design = {{setting.spinwin_wheel_design}};
+   var email_pop_spinwin={{setting.spinwin_email_setting}};
+   var visit_spinwin = 0;
+   var empty_email_spinwin="{{empty_email}}";
+   var validate_email_spinwin= "{{validate_email}}";
+   var module_enable_spinwin = '1';
+    var module_enable_spinwin1 = '1';
+ 
+    {{setting.spinwin_js}}
+</script>
+<style>
+    {{setting.spinwin_css}}
+</style>
+ <style>
+ .velsof_button {
+   background-color: {{setting.spinwin_button_background}};
+ }
+ .cancel_button{
+   color: {{setting.spinwin_no_lucky}};
+   text-align: right;  cursor: pointer;
+ }
+ #velsof_wheel_main_container{
+   background-color: {{setting.spinwin_wheel_background}};
+ }
+ .wheelslices{
+   color: {{setting.spinwin_font_color}};
+ }
+ #spin_wheel_logo {
+   z-index: 9999;
+   position: relative;
+}
+#velsof_wheel_container{
+    font-family: {{setting.spinwin_font_family}}; 
+}
+.wheelslices {
+    font-family: {{setting.spinwin_font_family}}; 
+}
+#velsof_wheel_main_container {
+    left:0% !important;
+}
+</style>
+<div id="velsof_wheel_container"  style="display: block;height: 100%; position: fixed; left: 0px; bottom: 0px;  top: 0px; z-index: 100000">
+ <div id="velsof_wheel_model"> </div>
+ <div id="velsof_wheel_main_container">
+        {% if theme==2 %}
+            <div id="velsoftop" class="velsoftheme xmas1"></div>
+            <div id="velsofbottom" class="velsoftheme xmas1"> </div>
+        {% elseif theme==1 %}
+            <div id="velsoftop" class="velsoftheme xmas2"></div>
+            <div id="velsofbottom" class="velsoftheme xmas2"> </div>
+        {% elseif theme == 'chocolate_day' %}
+            <style> 
+                #velsoftop.chocolate_day_theme {
+                    background: url(catalog/view/image/spinwin/chocolate_day/top.gif);
+                    background-repeat: no-repeat;
+                    opacity: 1;
+                    background-position: top center;
+                }
+                #velsofbottom.chocolate_day_theme  {
+                    background-image: url(catalog/view/image/spinwin/chocolate_day/bottom.png); 
+                    opacity: 1;
+                    background-size: auto;
+                }
+                #velsof_wheel_main_container {
+                    background-image: url(catalog/view/image/spinwin/chocolate_day/background.png);
+                }
+            </style>
+            <div id="velsoftop" class="velsoftheme chocolate_day_theme"></div>
+            <div id="velsofbottom" class="velsoftheme chocolate_day_theme"> </div>
+        {% elseif theme == 'hug_day' %}
+            <style> 
+                #velsoftop.hug_day_theme {
+                    background: url(catalog/view/image/spinwin/hug_day/top.png);
+                    opacity: 1;
+                    background-position: top center;
+                    background-repeat: no-repeat;
+                }
+                #velsofbottom.hug_day_theme  {
+                    background-image: url(catalog/view/image/spinwin/hug_day/bottom.gif); 
+                    background-position: bottom right 30px;
+                    opacity: 1;
+                    background-size: auto;
+                }
+                #velsof_wheel_main_container {
+                    background-image: url(catalog/view/image/spinwin/hug_day/background.png);
+                }
+            </style>
+            <div id="velsoftop" class="velsoftheme hug_day_theme"></div>
+            <div id="velsofbottom" class="velsoftheme hug_day_theme"> </div>
+        {% elseif theme == 'kiss_day' %}
+            <style> 
+                #velsoftop.kiss_day_theme {
+                    background-image: url(catalog/view/image/spinwin/kiss_day/top.png);
+                    background-repeat: no-repeat;
+                    opacity: 1;
+                    background-position: top left 120px
+                }
+                #velsofbottom.kiss_day_theme  {
+                    background-image: url(catalog/view/image/spinwin/kiss_day/bottom.gif); 
+                    background-position: bottom right 30px;
+                    opacity: 1;
+                    background-size: auto;
+                }
+                #velsof_wheel_main_container {
+                     background-image: url(catalog/view/image/spinwin/kiss_day/background.png);
+                }
+            </style>
+            <div id="velsoftop" class="velsoftheme kiss_day_theme"></div>
+            <div id="velsofbottom" class="velsoftheme kiss_day_theme"> </div>
+        {% elseif theme == 'promise_day' %}
+            <style> 
+                #velsoftop.promise_day_theme {
+                    background: url(catalog/view/image/spinwin/promise_day/top.png);
+                    background-repeat: no-repeat;
+                    opacity: 1;
+                    background-position: top center;
+                }
+                #velsofbottom.promise_day_theme  {
+                    background-image: url(catalog/view/image/spinwin/promise_day/bottom.gif); 
+                    background-position: bottom right 30px;
+                    opacity: 1;
+                    background-size: auto;
+                }
+                #velsof_wheel_main_container {
+                    background-image: url(catalog/view/image/spinwin/promise_day/background.png);
+                }
+            </style>
+            <div id="velsoftop" class="velsoftheme promise_day_theme"></div>
+            <div id="velsofbottom" class="velsoftheme promise_day_theme"> </div>
+        {% elseif theme == 'propose_day' %}
+            <style> 
+                #velsoftop.propose_day_theme {
+                    background: url(catalog/view/image/spinwin/propose_day/top.gif);
+                    background-repeat: no-repeat;
+                    opacity: 1;
+                    background-position: top center;
+                }
+                #velsofbottom.propose_day_theme  {
+                    background-image: url(catalog/view/image/spinwin/propose_day/bottom.png); 
+                    background-position: bottom right 30px;
+                    opacity: 1;
+                    background-size: auto;
+                }
+                #velsof_wheel_main_container {
+                    background-image: url(catalog/view/image/spinwin/propose_day/background.png);
+                }
+            </style>
+            <div id="velsoftop" class="velsoftheme propose_day_theme"></div>
+            <div id="velsofbottom" class="velsoftheme propose_day_theme"> </div>
+        {% elseif theme == 'rose_day' %}
+            <style> 
+                #velsoftop.rose_day_theme {
+                    background: url(catalog/view/image/spinwin/rose_day/top.png);
+                    background-repeat: no-repeat;
+                    opacity: 1;
+                    background-position: top left 140px;
+                }
+                #velsofbottom.rose_day_theme  {
+                    background-image: url(catalog/view/image/spinwin/rose_day/bottom.gif); 
+                    background-position: bottom right 30px;
+                    opacity: 1;
+                    background-size: auto;
+                }
+                #velsof_wheel_main_container {
+                    background-image: url(catalog/view/image/spinwin/rose_day/background.png);
+                }
+            </style>
+            <div id="velsoftop" class="velsoftheme rose_day_theme"></div>
+            <div id="velsofbottom" class="velsoftheme rose_day_theme"> </div>
+        {% elseif theme == 'teddy_day' %}
+            <style> 
+                #velsoftop.teddy_day_theme {
+                    background: url(catalog/view/image/spinwin/teddy_day/top.png);
+                    background-repeat: no-repeat;
+                    opacity: 1;
+                    background-position: top center;
+                }
+                #velsofbottom.teddy_day_theme  {
+                    background-image: url(catalog/view/image/spinwin/teddy_day/bottom.gif); 
+                    background-position: bottom right 30px;
+                    opacity: 1;
+                    background-size: auto;
+                }
+                #velsof_wheel_main_container {
+                    background-image: url(catalog/view/image/spinwin/teddy_day/background.png);
+                }
+            </style>
+
+            <div id="velsoftop" class="velsoftheme teddy_day_theme"></div>
+            <div id="velsofbottom" class="velsoftheme teddy_day_theme"> </div>
+        {% elseif theme == 'valentine_day' %}
+            <style> 
+                #velsoftop.valentine_day_theme {
+                    background: url(catalog/view/image/spinwin/valentine_day/top.png);
+                    background-repeat: no-repeat;
+                    opacity: 1;
+                    background-position: top center;
+                }
+                #velsofbottom.valentine_day_theme  {
+                    background-image: url(catalog/view/image/spinwin/valentine_day/bottom.gif); 
+                    background-position: bottom right 30px;
+                    opacity: 1;
+                    background-size: auto;
+                }
+                #velsof_wheel_main_container {
+                    background-image: url(catalog/view/image/spinwin/valentine_day/background.png);
+                }
+            </style>
+            <div id="velsoftop" class="velsoftheme valentine_day_theme"></div>
+            <div id="velsofbottom" class="velsoftheme valentine_day_theme"> </div>    
+        {% elseif theme==4 %}
+            <style> 
+                #velsoftop.halloween_theme1 {
+                    background-image: url(catalog/view/image/spinwin/halloween/theme1/overlay.png);
+                    background-repeat: no-repeat;
+                    background-position: top 5% center;
+                }
+                #velsofbottom.halloween_theme1  {
+                    background-image: url(catalog/view/image/spinwin/halloween/theme1/base.png); 
+                    background-position: bottom right;
+                    background-size: cover;
+                }
+            </style>
+            <div id="velsoftop" class="velsoftheme halloween_theme1"></div>
+            <div id="velsofbottom" class="velsoftheme halloween_theme1"> </div>
+        {% elseif theme==5 %}
+            <style> 
+                #velsoftop.halloween_theme2 {
+                    background-image: url(catalog/view/image/spinwin/halloween/theme2/overlay.png);
+                    background-repeat: no-repeat;
+                }
+                #velsofbottom.halloween_theme2  {
+                    background-image: url(catalog/view/image/spinwin/halloween/theme2/base.png);
+                    background-position: bottom right;
+                }
+                #velsof_wheel_main_container {
+                    background-image: url(catalog/view/image/spinwin/halloween/theme2/background.png);
+                }
+            </style>
+            <div id="velsoftop" class="velsoftheme halloween_theme2"></div>
+            <div id="velsofbottom" class="velsoftheme halloween_theme2"> </div>
+        {% elseif theme==6 %}
+            <style> 
+                #velsoftop.halloween_theme3 {
+                    background: url(catalog/view/image/spinwin/halloween/theme3/overlay.png);
+                    background-repeat: no-repeat;
+                    background-position: top 5% center;
+                    opacity: 1;
+                }
+                #velsofbottom.halloween_theme3  {
+                    background-image: url(catalog/view/image/spinwin/halloween/theme3/base.png);
+                    background-position: bottom right;
+                    opacity: 1;
+                }
+            </style>
+            <div id="velsoftop" class="velsoftheme halloween_theme3"></div>
+            <div id="velsofbottom" class="velsoftheme halloween_theme3"> </div>
+        {% elseif theme==7 %}
+            <style> 
+                #velsoftop.halloween_theme4 {
+                        background: url(catalog/view/image/spinwin/halloween/theme4/overlay.png);
+                        background-repeat: no-repeat;
+                        background-position: top right;
+                        opacity: 1;
+                }
+                #velsofbottom.halloween_theme4  {
+                    background-image: url(catalog/view/image/spinwin/halloween/theme4/base.png);
+                    background-position: bottom right;
+                    opacity: 1;
+                }
+            </style>
+            <div id="velsoftop" class="velsoftheme halloween_theme4"></div>
+            <div id="velsofbottom" class="velsoftheme halloween_theme4"> </div>
+        {% elseif theme==8 %}    <style> 
+                #velsoftop.black_friday_theme1 {
+                    background: url(catalog/view/image/spinwin/black_friday/theme1/overlay.png);
+                    background-size: cover;
+                    opacity: 1;
+                }
+                #velsofbottom.black_friday_theme1  {
+                    background-image: url(catalog/view/image/spinwin/black_friday/theme1/base.png);
+                    background-position: bottom right;
+                    background-size: auto;
+                }
+            </style>
+            <div id="velsoftop" class="velsoftheme black_friday_theme1"></div>
+            <div id="velsofbottom" class="velsoftheme black_friday_theme1"> </div>
+        {% elseif theme==9 %}
+            <style>
+                #velsoftop.black_friday_theme2 {
+                    background: url(catalog/view/image/spinwin/black_friday/theme2/overlay.png);
+                    background-repeat: no-repeat;
+                    background-position: top 5% center;
+                }
+
+                #velsofbottom.black_friday_theme2  {
+                    background-image: url(catalog/view/image/spinwin/black_friday/theme2/base.gif);
+                    background-position: bottom right;
+                    background-size: 48%;
+                    opacity: 1;
+                }
+            </style>
+            <div id="velsoftop" class="velsoftheme black_friday_theme2"></div>
+            <div id="velsofbottom" class="velsoftheme black_friday_theme2"> </div>
+        {% elseif theme==10 %}
+            <style>
+                #velsoftop.black_friday_theme3 {
+                    background: url(catalog/view/image/spinwin/black_friday/theme3/overlay.png);
+                    background-repeat: no-repeat;
+                    background-position: bottom right;
+                }
+
+                #velsofbottom.black_friday_theme3  {
+                    background-image: url(catalog/view/image/spinwin/black_friday/theme3/base.gif);
+                    background-position: bottom right;
+                    opacity: 1;
+                    background-size: cover;
+                }
+            </style>
+            <div id="velsoftop" class="velsoftheme black_friday_theme3"></div>
+            <div id="velsofbottom" class="velsoftheme black_friday_theme3"> </div>
+        {% elseif theme==11 %}
+            <style>
+                #velsoftop.black_friday_theme4 {
+                    background: url(catalog/view/image/spinwin/black_friday/theme4/overlay.png);
+                    background-repeat: no-repeat;
+                    background-position: top 5% center;
+                }
+
+                #velsofbottom.black_friday_theme4  {
+                    background-image: url(catalog/view/image/spinwin/black_friday/theme4/base.png);
+                    background-position: bottom 2% right 2%;
+                    background-size: 45%;
+                    opacity: 1;
+                }
+            </style>
+            <div id="velsoftop" class="velsoftheme black_friday_theme4"></div>
+            <div id="velsofbottom" class="velsoftheme black_friday_theme4"> </div>
+        {% elseif theme==12 %}
+            <style>
+                #velsoftop.thanks_giving_theme1 {
+                    background: url(catalog/view/image/spinwin/thanks_giving/theme1/overlay.png);
+                    background-repeat: no-repeat;
+                    opacity: 0.5;
+                }
+
+                #velsofbottom.thanks_giving_theme1  {
+                    background-image: url(catalog/view/image/spinwin/thanks_giving/theme1/base.png);
+                    background-position: bottom right;
+                    background-size: cover;
+                }
+                #background-image {
+                    background-image: url(catalog/view/image/spinwin/thanks_giving/theme1/background.png);
+                }
+            </style>
+            <div id="background-image"></div>
+            <div id="velsoftop" class="velsoftheme thanks_giving_theme1"></div>
+            <div id="velsofbottom" class="velsoftheme thanks_giving_theme1"> </div>
+        {% elseif theme==13 %}
+            <style>
+                #velsoftop.thanks_giving_theme2 {
+                    background: url(catalog/view/image/spinwin/thanks_giving/theme2/overlay.png);
+                    background-repeat: no-repeat;
+                    opacity: 1;
+                    background-position: top center;
+                }
+
+                #velsofbottom.thanks_giving_theme2  {
+                    background-image: url(catalog/view/image/spinwin/thanks_giving/theme2/base.png);
+                    background-position: bottom right;
+                    opacity: 4;
+                }
+                #velsof_wheel_main_container {
+                    background-image: url(catalog/view/image/spinwin/thanks_giving/theme2/background.png);
+                }
+            </style>
+            <div id="velsoftop" class="velsoftheme thanks_giving_theme2"></div>
+            <div id="velsofbottom" class="velsoftheme thanks_giving_theme2"> </div>
+        {% elseif theme==14 %}
+            <style>
+                #velsoftop.thanks_giving_theme3 {
+                background: url(catalog/view/image/spinwin/thanks_giving/theme3/overlay.png);
+                background-repeat: no-repeat;
+                opacity: 1;
+                background-position: top center;
+                }
+
+                #velsofbottom.thanks_giving_theme3  {
+                    background-image: url(catalog/view/image/spinwin/thanks_giving/theme3/base.png);
+                    background-position: bottom right;
+                    opacity: 1;
+                    background-size: cover;
+                }
+            </style>
+            <div id="velsoftop" class="velsoftheme thanks_giving_theme3"></div>
+            <div id="velsofbottom" class="velsoftheme thanks_giving_theme3"> </div>
+        {% elseif theme==15 %}
+            <style>
+                #velsoftop.thanks_giving_theme4 {
+                background: url(catalog/view/image/spinwin/thanks_giving/theme4/overlay.png);
+                background-repeat: no-repeat;
+                background-position: top 5% left 30%;
+                }
+
+                #velsofbottom.thanks_giving_theme4  {
+                    background-image: url(catalog/view/image/spinwin/thanks_giving/theme4/base.png);
+                    background-position: bottom right;
+                    opacity: 3;
+                    background-size: cover;
+                }
+            </style>
+            <div id="velsoftop" class="velsoftheme thanks_giving_theme4"></div>
+            <div id="velsofbottom" class="velsoftheme thanks_giving_theme4"> </div>
+        {% elseif theme==16 %}
+            <style>
+                #velsoftop.easter_theme1 {
+                    background: url(catalog/view/image/spinwin/easter/theme1/overlay.png);
+                    background-repeat: repeat-x;
+                    background-position: top center;
+                }
+
+                #velsofbottom.easter_theme1  {
+                    background-image: url(catalog/view/image/spinwin/easter/theme1/base.png);
+                    background-position: bottom right;
+                    background-size: auto;
+                    opacity: 0.7;
+                }
+                #background-image {
+                    background-image: url(catalog/view/image/spinwin/easter/theme1/background.png);
+                }
+            </style>
+            <div id="background-image"></div>
+            <div id="velsoftop" class="velsoftheme easter_theme1"></div>
+            <div id="velsofbottom" class="velsoftheme easter_theme1"> </div>
+        {% elseif theme==17 %}
+            <style>
+                #velsoftop.easter_theme2 {
+                    background: url(catalog/view/image/spinwin/easter/theme2/overlay.png);
+                    background-repeat: repeat-x;
+                    opacity: 1;
+                }
+
+                #velsofbottom.easter_theme2  {
+                    background-image: url(catalog/view/image/spinwin/easter/theme2/base.png);
+                    background-position: bottom right;
+                    background-size: auto;
+                    opacity: 0.7;
+                }
+                #background-image {
+                    background-image: url(catalog/view/image/spinwin/easter/theme2/background.png);
+                }
+            </style>
+            <div id="background-image"></div>
+            <div id="velsoftop" class="velsoftheme easter_theme2"></div>
+            <div id="velsofbottom" class="velsoftheme easter_theme2"> </div>
+        {% elseif theme==18 %}
+            <style>
+                #velsoftop.easter_theme3 {
+                    background: url(catalog/view/image/spinwin/easter/theme3/overlay.png);
+                    background-repeat: no-repeat;
+                    background-position: top center;
+                }
+
+                #velsofbottom.easter_theme3  {
+                    background-image: url(catalog/view/image/spinwin/easter/theme3/base.png);
+                    background-position: bottom right;
+                    background-size: cover;
+                    opacity: 1;
+                }
+                #background-image {
+                    background-image: url(catalog/view/image/spinwin/easter/theme3/background.png);
+                }
+            </style>
+            <div id="background-image"></div>
+            <div id="velsoftop" class="velsoftheme easter_theme3"></div>
+            <div id="velsofbottom" class="velsoftheme easter_theme3"> </div>
+        {% elseif theme==19 %}
+            <style>
+                #velsoftop.diwali_theme1 {
+                    background: url(catalog/view/image/spinwin/diwali/theme1/overlay.png);
+                    background-repeat: no-repeat;
+                    opacity: 1;
+                }
+                #velsofbottom.diwali_theme1  {
+                    background-image: url(catalog/view/image/spinwin/diwali/theme1/bottom.png);
+                    background-position: bottom right;
+                    opacity: 1;
+                }
+                #velsof_wheel_main_container {
+                    background-image: url(catalog/view/image/spinwin/diwali/theme1/base.gif);
+                }
+            </style>
+            <div id="velsoftop" class="velsoftheme diwali_theme1"></div>
+            <div id="velsofbottom" class="velsoftheme diwali_theme1"> </div>
+        {% elseif theme==20 %}
+            <style>
+                #velsoftop.diwali_theme2 {
+                    background: url(catalog/view/image/spinwin/diwali/theme2/overlay.png);
+                    background-repeat: no-repeat;
+                    opacity: 1;
+                }
+
+                #velsofbottom.diwali_theme2  {
+                    background-image: url(catalog/view/image/spinwin/diwali/theme2/base.png);
+                    background-position: bottom right;
+                    opacity: 1;
+                }
+                #velsof_wheel_main_container {
+                    background-image: url(catalog/view/image/spinwin/diwali/theme2/background.png);
+                }
+            </style>
+            <div id="velsoftop" class="velsoftheme diwali_theme2"></div>
+            <div id="velsofbottom" class="velsoftheme diwali_theme2"> </div>
+        {% elseif theme==21 %}
+            <style>
+                #velsoftop.diwali_theme3 {
+                    background: url(catalog/view/image/spinwin/diwali/theme3/overlay.png);
+                    background-repeat: no-repeat;
+                    opacity: 1;
+                }
+
+                #velsofbottom.diwali_theme3  {
+                    background-image: url(catalog/view/image/spinwin/diwali/theme3/base.png);
+                    background-position: bottom right 5%;
+                    opacity: 1;
+                    background-size: auto;
+                }
+                #velsof_wheel_main_container {
+                    background-image: url(catalog/view/image/spinwin/diwali/theme3/background.png);
+                }
+            </style>
+            <div id="velsoftop" class="velsoftheme diwali_theme3"></div>
+            <div id="velsofbottom" class="velsoftheme diwali_theme3"> </div>
+        {% elseif theme==22 %}
+            <style>
+                #velsoftop.diwali_theme4 {
+                    background: url(catalog/view/image/spinwin/diwali/theme4/overlay.png);
+                    background-repeat: no-repeat;
+                    opacity: 1;
+                }
+
+                #velsofbottom.diwali_theme4  {
+                    background-image: url(catalog/view/image/spinwin/diwali/theme4/base.png);
+                    background-position: bottom 10% right 5%;
+                    opacity: 1;
+                    background-size: auto;
+                }
+            </style>
+            <div id="velsoftop" class="velsoftheme diwali_theme4"></div>
+            <div id="velsofbottom" class="velsoftheme diwali_theme4"> </div>
+        {% elseif theme==23 %}
+            <style>
+                #velsoftop.diwali_theme5 {
+                    background: url(catalog/view/image/spinwin/diwali/theme5/overlay.png);
+                    background-repeat: no-repeat;
+                    opacity: 0.7;
+                }
+
+                #velsofbottom.diwali_theme5  {
+                    background-image: url(catalog/view/image/spinwin/diwali/theme5/base.gif);
+                    opacity: 0.5;
+                }
+            </style>
+            <div id="velsoftop" class="velsoftheme diwali_theme5"></div>
+            <div id="velsofbottom" class="velsoftheme diwali_theme5"> </div>
+        {% elseif theme==0 %}
+            <div id="velsoftop" class="velsoftheme newyear1"></div>
+            <div id="velsofbottom" class="velsoftheme newyear1"> </div>
+        {% endif %}
+   <div id="velsof_offer_container" style="margin-top: 30% !important;">
+    {% if setting.spinwin_imagedisplay==1 %} 
+     <div id="spin_wheel_logo_container"><img src='image/{{setting.spinwin_logo}}' alt='Logo' id='spin_wheel_logo'/></div>
+     {% endif %}
+     <div id="velsof_offer_main_container">
+      <div id='main_title' class="velsof_main_title">{{setting.spinwin_title_text}}</div>
+      <div id = 'suc_msg' style = 'display: none;' class="velsof_main_title"></div>
+      <div>
+       <div id='velsof_success_description' class="velsof_subtitle" style="padding-bottom:10px ;display: none;"></div>
+       <div id='velsof_description' class="velsof_subtitle" style="padding-bottom:10px;">{{setting.spinwin_subtitle_text}}</div>
+       <ul class="velsof_ul">
+        <li>{{setting.spinwin_rules_text}}</li>
+      </ul>
+    </div>
+    <div>
+     <input id='velsof_spin_wheel' type="text" name="spin_wheel_email" class="velsof_input_field" placeholder="{{email_place}}" value=''>
+     <div class="saving velsof_button" style='display:none;'><span> </span><span> </span><span> </span><span> </span><span> </span></div>
+     <input id='rotate_btn' type="button" class="velsof_button" name="Rotate" value="{{try_luck}}" onclick="onRotateWheel()" />
+     <div id="exit" class="velsof_subtitle cancel_button" >{{dnt_feel}}</div>
+     {#<div id="continue_btn" class="velsof_button exit_button" style='display:none;'>{{continue}}</div>#}
+   </div>
+ </div>
+ <div class='before_loader' id="velsof_offer_main_container" style='display:none;'><img id='spin_after_loader' src="image/spinwin/loader.gif" alt='loader'/> </div>
+ <div class='coupon_result'></div>
+</div>
+<div id="velsof_spinner_container" style="margin-top: -9em !important;">
+ <div id="velsof_spinners">
+  <div class="velsof_shadow"></div>
+  <div id="velsof_spinner" class="{% if setting.spinwin_wheel_design==0%} velsof_spinner1 {% else %} velsof_spinner2 {% endif %}">
+    {% set deg =0 %}
+    {% for value in spin_data%}
+    <div class="wheelslices" style="transform: rotate(-{{deg}}deg) translate(0px, -50%);">{{value.label}}</div>
+    {% set deg = deg + 30 %}
+    {% endfor %}        
+  ?>
+</div>
+</div>
+<img id='velsof_wheel_pointer' class="velsof_wheel_pointer2" src="image/spinwin/pointer2.png" alt="Ponter"/>
+</div>
+</div>
+</div>
+
+<script src="catalog/view/javascript/spinwin/js/ouibounce.js" type="text/javascript"></script>
+<script src="catalog/view/javascript/spinwin/js/tooltipster.js" type="text/javascript"></script>
+<script src="catalog/view/javascript/spinwin/js/jquery.fireworks.js" type="text/javascript"></script>
+<script src="catalog/view/javascript/spinwin/js/mab_spin_wheel.js" type="text/javascript"></script>
+<script src="catalog/view/javascript/spinwin/js/velsof_wheel.js" type="text/javascript"></script>
+

@@ -1,0 +1,352 @@
+{{ header }}{{ column_left }}
+<div id="content">
+    <div class="page-header">
+        <div class="container-fluid">
+            <div class="pull-right">
+                <button type="submit" form="form-shipping" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+                <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+            <h1>{{ heading_title }} {{ module_version }}</h1>
+            <ul class="breadcrumb">
+                {% for breadcrumb in breadcrumbs %}
+                    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="container-fluid">
+        {% if error_warning %}
+            <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endif %}
+
+        {% for key, message in alert_messages %}
+            {{ message }}
+        {% endfor %}
+
+        {#---------------------------------#}
+
+        <style>
+            .form-group {
+                border: none !important;
+                padding-top: 0.75rem;
+                padding-bottom: 0.75rem;
+            }
+        </style>
+
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-shipping" class="form-horizontal">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><b>{{ text_module_configuration }}</b></h3>
+                </div>
+                <div class="panel-body">
+                    {#<div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-zoom">{{ text_status }}</label>
+                        <div class="col-sm-10">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox"
+                                           name="active" {{ shipping_glovo_status ? 'checked' : '' }}
+                                           value="{{ shipping_glovo_status ? 1 : 0 }}">
+                                    {{ text_enable }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>#}
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-status">{{ text_status }}</label>
+                        <div class="col-sm-10">
+                            <select name="shipping_glovo_status" id="input-status" class="form-control">
+                                {% if shipping_glovo_status %}
+                                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                                    <option value="0">{{ text_disabled }}</option>
+                                {% else %}
+                                    <option value="1">{{ text_enabled }}</option>
+                                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                                {% endif %}
+                            </select>
+                        </div>
+                    </div>
+
+                    {#<div class="form-group">#}
+                        {#<label class="col-sm-2 control-label" for="glovo_automatic_send">¿Send Order Automatically?</label>#}
+                        {#<div class="col-sm-10">#}
+                            {#<select name="shipping_glovo_automatic_send" id="glovo_automatic_send" class="form-control">#}
+                                {#{% if shipping_glovo_status %}#}
+                                    {#<option value="1" selected="selected">{{ text_yes }}</option>#}
+                                    {#<option value="0">{{ text_no }}</option>#}
+                                {#{% else %}#}
+                                    {#<option value="1">{{ text_yes }}</option>#}
+                                    {#<option value="0" selected="selected">{{ text_no }}</option>#}
+                                {#{% endif %}#}
+                            {#</select>#}
+                        {#</div>#}
+                    {#</div>#}
+                    {#{{ field_glovo_sort_order }}#}
+                    {#<div class="form-group">#}
+                        {#<label class="col-sm-2 control-label" for="input-geo-zone">{{ entry_order_status }}</label>#}
+                        {#<div class="col-sm-10">#}
+                            {#<select name="shipping_glovo_order_status_id" id="input-order-status" class="form-control">#}
+                                {#{% for order_status in order_statuses %}#}
+                                    {#{% if order_status.order_status_id == shipping_glovo_order_status_id %}#}
+                                        {#<option value="{{ order_status.order_status_id }}" selected="selected">{{ order_status.name }}</option>#}
+                                    {#{% else %}#}
+                                        {#<option value="{{ order_status.order_status_id }}">{{ order_status.name }}</option>#}
+                                    {#{% endif %}#}
+                                {#{% endfor %}#}
+                            {#</select>#}
+                            {#<div class="help">#}
+                                {#Order Status that Glovo uses to send order automatic.#}
+                            {#</div>#}
+                        {#</div>#}
+                    {#</div>#}
+
+                    {#<div class="form-group">#}
+                        {#<label class="col-sm-2 control-label" for="input-geo-zone">{{ entry_currency }}</label>#}
+                        {#<div class="col-sm-10">#}
+                            {#<select name="shipping_glovo_currency" id="input-order-status" class="form-control">#}
+                                {#{% for currency in currencies %}#}
+                                    {#{% if currency.code == shipping_glovo_currency_code %}#}
+                                        {#<option value="{{ currency.code }}" selected="selected">{{ currency.title }}</option>#}
+                                    {#{% else %}#}
+                                        {#<option value="{{ currency.code }}">{{ currency.title }}</option>#}
+                                    {#{% endif %}#}
+                                {#{% endfor %}#}
+                            {#</select>#}
+                            {#<div class="help">Test</div>#}
+                        {#</div>#}
+                    {#</div>#}
+
+                </div>
+            </div>
+
+            {# Cost of Shipping #}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><b>{{ text_cost_shipping }}</b></h3>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-zoom">{{ text_cost }}</label>
+                        <div class="col-sm-10">
+                            <div class="radio">
+                                    <label><input type="radio" name="shipping_glovo_cost_shipping_type" {{ shipping_glovo_cost_shipping_type == '1' ? 'checked' : '' }} value="1" > {{ text_free }}</label><br>
+                                {#<label><input type="radio" name="shipping_glovo_cost_shipping_type" {{ shipping_glovo_cost_shipping_type == '2' ? 'checked' : '' }} value="2" > {{ text_pulled_automatic }}</label><br>#}
+                                <label>
+                                    <input type="radio" name="shipping_glovo_cost_shipping_type" {{ shipping_glovo_cost_shipping_type == '3' ? 'checked' : '' }} value="3" > {{ text_based_price }}: <b>({{ currency_code }})</b>
+                                    <br><input type="number" class="form-control" name="shipping_glovo_cost_shipping_price" value="{{ shipping_glovo_cost_shipping_price }}" style="width: 150px;" min="0">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-free-shipping">Free Shipping When Cart Price is major than</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="shipping_glovo_free_shipping_cost" id="input-free-shipping" value="{{ shipping_glovo_free_shipping_cost }}" class="form-control" required />
+                            <div class="help">Price in <b>({{ currency_code }})</b></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {# Status Configuration #}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><b>{{ text_status_configuration }}</b></h3>
+                </div>
+                <div class="panel-body">
+                    {#<div class="form-group">#}
+                        {#<label class="col-sm-2 control-label" for="input-zoom">{{ text_order_status }}</label>#}
+                        {#<div class="col-sm-10">#}
+                            {#<input type="text" name="zoom" value="" id="input-zoom" class="form-control" required />#}
+                            {#<div class="help">{{ text_order_help_1 }}</div>#}
+                        {#</div>#}
+                    {#</div>#}
+                    {#<div class="form-group">#}
+                        {#<label class="col-sm-2 control-label" for="input-zoom">{{ text_order_change_status }}</label>#}
+                        {#<div class="col-sm-10">#}
+                            {#<div class="checkbox">#}
+                                {#<label>#}
+                                    {#<input type="checkbox"> {{ text_order_help_2 }}#}
+                                {#</label>#}
+                            {#</div>#}
+                        {#</div>#}
+                    {#</div>#}
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-zoom">{{ text_order_new_status }}</label>
+                        <div class="col-sm-10">
+                            <select name="shipping_glovo_order_status_id" id="input-order-status" class="form-control">
+                                {% for order_status in order_statuses %}
+                                    {% if order_status.order_status_id == shipping_glovo_order_status_id %}
+                                        <option value="{{ order_status.order_status_id }}" selected="selected">{{ order_status.name }}</option>
+                                    {% else %}
+                                        <option value="{{ order_status.order_status_id }}">{{ order_status.name }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                            <div class="help">{{ text_order_help_3 }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {# Google Maps Configuration #}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><b>{{ text_gmaps_configuration }}</b></h3>
+                </div>
+                <div class="panel-body">
+                    <p>{{ text_gmaps_configuration_help_1 }}</p>
+
+                    {{ field_glovo_google_maps_key }}
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-zoom">{{ text_map_zoom }}</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="shipping_glovo_google_map_zoom" value="{{ shipping_glovo_google_map_zoom }}" id="google_map_zoom" class="form-control" required />
+                            <div class="help">{{ text_map_zoom_help }}</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-logo_commerce">{{ text_store_icon }}</label>
+                        <div class="col-sm-10">
+                            <a href="" id="thumb-image" data-toggle="image" class="img-thumbnail"><img src="{{ image_thumb }}" alt="" title="" data-placeholder="{{ image_placeholder }}" /></a>
+                            <input type="hidden" name="shipping_glovo_google_store_icon" value="{{ image_placeholder }}" id="input-logo_commerce" />
+                            {% if error_logo_commerce %}
+                                <div class="text-danger">{{ error_logo_commerce }}</div>
+                            {% endif %}
+                            <div class="help">{{ text_store_icon_help }}</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            {# Preparation Time Configuration #}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><b>{{ text_preparation_time_configuration }}</b></h3>
+                </div>
+                <div class="panel-body">
+                    <p>{{ text_preparation_time_help_1 }} <a href="{{ url_product_attribute }}" target="_blank">{{ text_preparation_time_help_url }}</a></p>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-preparation-time">{{ text_preparation_time_attribute }}</label>
+                        <div class="col-sm-10">
+                            <select name="shipping_glovo_preparation_time_attrib" id="input-preparation-time" class="form-control">
+                                {% for attrib in product_attributes %}
+                                    <option value="{{ attrib.attribute_id }}"
+                                            {{ shipping_glovo_preparation_time_attrib == attrib.attribute_id ? 'selected="selected"' : '' }}>
+                                        {{ attrib.name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                            <div class="help">{{ text_preparation_time_help_2 }}</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-preparation-time-additional">{{ text_preparation_time_additional }}</label>
+                        <div class="col-sm-10">
+                            <input type="text" id="input-preparation-time-additional" name="shipping_glovo_preparation_time_additional" value="{{ shipping_glovo_preparation_time_additional }}" id="preparation_time_additional" class="form-control" required />
+                            <div class="help">Value in minutes (ex: for 1 hour you write 60)</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            {# Stores Configuration #}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><b>Stores Configuration</b></h3>
+                </div>
+                <div class="panel-body">
+                    <a href="{{ stores_configuration_url }}">Click here</a>
+                </div>
+            </div>
+
+            {# Orders List #}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><b>Order List</b></h3>
+                </div>
+                <div class="panel-body">
+                    <a href="{{ stores_order_list_url }}">Click here</a>
+                </div>
+            </div>
+
+
+        </form>
+    </div>
+</div>
+
+<link href="../catalog/view/javascript/glovo/jquery.timepicker.min.css" type="text/css" rel="stylesheet" />
+<style>
+    .fmtp {
+        background-color: #fff !important;
+        display: inline !important;
+        width: auto;
+    }
+</style>
+<script type="text/javascript" src="../catalog/view/javascript/glovo/jquery.timepicker.min.js"></script>
+
+<script type="text/javascript">
+    $('select[name="shipping_glovo_country_id"]').on('change', function () {
+        console.log('valor: ', $(this)[0].value);
+        $.ajax({
+            url: 'index.php?route=extension/shipping/glovo/get_zones&user_token={{ user_token }}&country_id=' + this.value,
+            dataType: 'json',
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function(json) {
+                let html = '<option value="">{{ text_select }}</option>';
+
+                if (json['zone'] && json['zone'] != '') {
+                    for (i = 0; i < json['zone'].length; i++) {
+                        html += '<option value="' + json['zone'][i]['zone_id'] + '"';
+
+                        if (json['zone'][i]['zone_id'] == '{{ zone_id }}') {
+                            html += ' selected="selected"';
+                        }
+
+                        html += '>' + json['zone'][i]['name'] + '</option>';
+                    }
+                } else {
+                    html += '<option value="0" selected="selected">{{ text_none }}</option>';
+                }
+
+                $('select[name="shipping_glovo_zone_id"]').html(html);
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+            }
+        });
+    });
+
+    $('.timepicker').timepicker({
+        timeFormat: 'HH:mm',
+        interval: 30,
+        minTime: '0',
+        startTime: '00:00',
+        maxTime: '23:30',
+        dynamic: false,
+        dropdown: true,
+        scrollbar: true
+    });
+
+    $('#form-shipping').on('submit', function() {
+        let values = [];
+        $('.glovo_day').each(function () {
+            values.push($(this).val());
+        });
+
+        $('[name="shipping_glovo_city_hour"]').val(values.join(','));
+        return true;
+    });
+</script>
+{{ footer }}

@@ -1,0 +1,16 @@
+li[data-view="day"],
+li.muted:not(.disabled)[data-view="day next"],
+li.muted:not(.disabled)[data-view="day prev"]
+{
+    font-weight: bold !important;
+    /*border: 1px solid !important;*/
+}
+
+li[data-view="day picked"] {
+    border: 1px solid !important;
+    font-weight: bold !important;
+}
+
+li[data-view="month prev"], li[data-view="month current"], li[data-view="month next"] {
+    font-weight: bold !important;
+}

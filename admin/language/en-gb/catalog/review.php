@@ -1,0 +1,25 @@
+<?php
+$_['heading_title'] 	=  'Comentarios';
+$_['text_success'] 	=  'Éxito: ¡Has modificado las reseñas!';
+$_['text_list'] 	=  'Lista de revisión';
+$_['text_add'] 	=  'Agregar una opinión';
+$_['text_edit'] 	=  'Editar revisión';
+$_['text_filter'] 	=  'Filtrar';
+$_['column_product'] 	=  'Producto';
+$_['column_author'] 	=  'Autor';
+$_['column_rating'] 	=  'Clasificación';
+$_['column_status'] 	=  'Estado';
+$_['column_date_added'] 	=  'Fecha Agregada';
+$_['column_action'] 	=  'Acción';
+$_['entry_product'] 	=  'Producto';
+$_['entry_author'] 	=  'Autor';
+$_['entry_rating'] 	=  'Clasificación';
+$_['entry_status'] 	=  'Estado';
+$_['entry_text'] 	=  'Texto';
+$_['entry_date_added'] 	=  'Fecha Agregada';
+$_['help_product'] 	=  '(Autocompletar)';
+$_['error_permission'] 	=  'Advertencia: ¡No tienes permiso para modificar comentarios!';
+$_['error_product'] 	=  'Producto requerido!';
+$_['error_author'] 	=  'El autor debe tener entre 3 y 64 caracteres.';
+$_['error_text'] 	=  '¡El texto de la revisión debe tener por lo menos 1 carácter!';
+$_['error_rating'] 	=  'Revisión crítica requerida!';

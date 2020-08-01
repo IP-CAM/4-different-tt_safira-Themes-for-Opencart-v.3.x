@@ -1,0 +1,85 @@
+<footer>
+	<div class="footer-links">  
+	  <div class="container">
+		<div class="inner">	
+			<div class="row">
+			  <div class="col col-md-4 col-sm-12">
+				<div class="btn-group">
+					<h5 data-toggle="dropdown" class="dropdown-toggle visible-xs">{{ text_contact }}<i class="visible-xs ion-chevron-down"></i></h5>
+					<div class="dropdown-menu footer-content">
+						<div class="logo-footer"><a href="#"><img src="catalog/view/theme/tt_safira1/image/logo-footer.png" alt=""></a></div>
+						<p class="description-footer">{{ text_description_footer }}</p>
+						<p><span>{{ text_address }}</span>{{ address }}</p>
+						<p><span>{{ text_email }}</span>{{ email }}</p>
+						<p><span>{{ text_phone }}</span>{{ telephone }}</p>
+					</div>
+				</div>
+			  </div>
+			  <div class="col col-md-2 col-sm-6">
+				<div class="btn-group">
+					<h5 data-toggle="dropdown" class="dropdown-toggle">{{ text_information }}<i class="visible-xs ion-chevron-down"></i></h5>
+					<div class="dropdown-menu footer-content footer-information">
+						<ul class="list-unstyled">
+						 {% if informations %}
+						 {% for information in informations %}
+						  <li><a href="{{ information.href }}">{{ information.title }}</a></li>
+						  {% endfor %}
+						  {% endif %}
+						  <li><a href="{{ contact }}">{{ text_contact }}</a></li>
+						  <li><a href="{{ sitemap }}">{{ text_sitemap }}</a></li>
+						</ul>
+					</div>
+				</div>
+			  </div>
+			  <div class="col col-md-2 col-sm-6">
+				<div class="btn-group">
+					<h5 data-toggle="dropdown" class="dropdown-toggle">{{ text_extra }}<i class="visible-xs ion-chevron-down"></i></h5>
+					<div class="dropdown-menu">
+						<ul class="list-unstyled">
+						  <li><a href="{{ manufacturer }}">{{ text_manufacturer }}</a></li>
+						  <li><a href="{{ voucher }}">{{ text_voucher }}</a></li>
+						  <li><a href="{{ affiliate }}">{{ text_affiliate }}</a></li>
+						  <li><a href="{{ special }}">{{ text_special }}</a></li>
+						  <li><a href="{{ return }}">{{ text_return }}</a></li>
+						  <li><a href="{{ order }}">{{ text_order }}</a></li>
+						</ul>
+					</div>
+				</div>
+			  </div>
+			   <div class="col col-md-4 col-sm-6">
+				<div class="btn-group">
+					<h5 data-toggle="dropdown" class="dropdown-toggle">{{ text_signup_newsletter }}<i class="visible-xs ion-chevron-down"></i></h5>
+					<div class="dropdown-menu">
+						<ul class="list-unstyled">
+							{{ position5 }}
+						</ul>
+					</div>
+				</div>
+			  </div>
+			</div>
+		</div>
+	  </div>
+	</div>
+	<div class="footer-bottom">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-6 col-sm-12">
+					<div class="footer-copyright">
+						<p class="text-powered">{{ powered }}</p>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12">
+					{{ position6 }}
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+{% for script in scripts %}
+<script src="{{ script }}" type="text/javascript"></script>
+{% endfor %}
+<!--
+OpenCart is open source software and you are free to remove the powered by OpenCart if you want, but its generally accepted practise to make a small donation.
+Please donate via PayPal to donate@opencart.com
+//-->
+</div></body></html>

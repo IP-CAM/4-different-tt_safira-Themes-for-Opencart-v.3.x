@@ -1,0 +1,180 @@
+{% if redirect is not defined %}
+
+<style>
+    body{
+	background:#E8E8E8;
+    }
+    #button-confirm{
+	width:96%;
+	position:absolute;
+	left:2%;
+	padding:10px;
+	margin-bottom:20px;
+	background:#F6846A;
+	border:none;
+    }
+    div.pull-right{
+	width:96%;
+	position:absolute;
+	left:2%;
+	margin-bottom:20px;
+	background:#F6846A;
+	border:none;
+    }
+    input.btn.btn-primary{
+	width:96%;
+	position:absolute;
+	left:2%;
+	padding:10px;
+	margin-bottom:20px;
+	background:#F6846A;
+	border:none;
+    }
+    .confirm-total-block{
+	float:left;
+	width:92%;
+	background:white;
+	padding:10px;
+	margin:4%;
+	border-radius:3px;
+	box-shadow:0px 1px 2px 1px rgba(0, 0, 0, 0.1);
+	margin-bottom:0px !important;
+    }
+    .confirm-outer-div{
+	float:left;
+	width:92%;
+	background:white;
+	padding:10px;
+	margin:4%;
+	border-radius:3px;
+	box-shadow:0px 1px 2px 1px rgba(0, 0, 0, 0.1);
+	margin-bottom:0px !important;
+    }
+    .confirm-product-image-div{
+	float:left;
+	padding-right:10px;
+    }
+    .confirm-product-name{
+	float:left;
+	text-align: center;
+//	margin-bottom: 5px;
+    }
+    .confirm-product-price{
+	float:right;
+	color:#598525;
+        font-size: 16px;
+        vertical-align: bottom;
+    }
+    .confirm-outer-div td{
+	padding-right:25px;
+	padding-bottom:10px;
+	font-size:12px;
+	color:#737171;
+    }
+    .confirm-total-block .td-title{
+    text-align:right;
+    padding-right:50px;
+    padding-bottom:10px;
+    font-size:16px;
+    color:#737171;
+    }
+    .confirm-total-block .td-text{
+    text-align:right;
+    font-size:16px;
+    padding-bottom:10px;    
+    color:#222;
+    }
+    .confirm-total-block .td-price{
+	color:#598525;
+    }
+    .confirm-total-block table{
+    float:right;
+    }
+    .payment-info h2{
+    text-align: center !important;
+    }
+    
+</style>
+
+{% for product in products %} 
+     <div class="confirm-outer-div">
+{#	<div class="confirm-product-image-div">
+	    <img src="{{ product['image'] }}" alt="{{ product['name'] }}" title="{{ product['name'] }}"  />
+	</div>#}
+	<div class="confirm-product-name">
+	    {{ '<b>'~product['name']|slice(0,23)~'...</br>' }}  
+	</div>
+         <br/>
+	<div class="confirm-product-options-qty" style="float: left; margin-top: 5px;">
+	    <table style="font-size: 20px !important;"><tbody>
+	{% for option in product['option'] %} 
+          <tr><td>{{ option['name']|slice(0,10) }}:</td> <td>{{ option['value'] }}</td></tr>
+          {% endfor %} 
+          {% if (product['recurring']) %} 
+          <br />
+          <span class="label label-info">{{ text_recurring_item }}</span>{{ product['recurring'] }} 
+          {% endif %} 
+	  <tr><td>{{ "Qty: " }} </td><td>{{ product['quantity'] }}</td></tr> 
+	  </tbody></table>
+	</div>
+	<div class="confirm-product-price">
+	     {{ product['total'] }} 
+	</div>
+    </div>
+    {% endfor %} 
+    
+    
+    {% for voucher in vouchers %} 
+    <div class="confirm-outer-div">
+	<div class="confirm-product-image-div">
+	No Image
+	</div>
+	
+	<div class="confirm-product-name">
+	    {{ '<b>'~voucher['description']~'<b>' }} 
+	</div>
+	<div class="confirm-product-options-qty">
+	    <table><tbody>
+	  <tr><td>{{ "Qty: " }} </td><td>{{ "1" }}</td></tr> 
+	  </tbody></table>
+	</div>
+	<div class="confirm-product-price">
+	     {{ voucher['amount'] }} 
+	</div>
+    </div>
+    {% endfor %} 
+    
+    
+     <div class="confirm-total-block">
+	    <table><tbody>
+	
+	{% set length=0 %}
+	{% set i=1 %}
+        {% set length=totals|length %}
+	{% for total in totals %} 
+	<tr><td class='td-title'><small> {{ total['title'] }}:</td> <td {% if (i == length) %} {{ 'class="td-price td-text"' }}{% else %} {{ 'class="td-text"' }}{% endif %} ><b>{{ total['text'] }}<b></small></td></tr>
+          
+	 {% set i=i+1 %}
+	 {% endfor %} 
+	  </tbody></table>
+	</div>
+    
+
+    <!-- Don't remove below div, its absense mess up whole webview in our mobile app -->
+<div class="table-responsive">
+  <table class="table table-bordered table-hover">
+    
+  </table>
+</div>
+    <!--Don't remove above div -->
+    
+    
+    <div class="payment-info" style="padding:4%">
+{{ payment }}
+<br><br>
+    </div>
+{% else %}
+<script type="text/javascript"><!--
+location = '{{ redirect }}';
+//--></script>
+{% endif %}

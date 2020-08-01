@@ -1,0 +1,427 @@
+<div class="products-container {{ layout_classname }} {% if module_type == 'multi_tabs' %}{{ 'tabs-product' }}{% endif %}">
+    <div class="block-title">
+		<p>
+		{% if module_des %}
+            {{ module_des }}
+        {% endif %}
+		</p>
+        <h3><span>{{ title ? title : module_product_title }}</span></h3>
+		{% if module_type == 'multi_tabs' %}
+			<div class="tabs-style">
+				<ul class="nav nav-tabs">
+					{% set tab_count = 0 %}
+					{% for tab in tabs %}
+						<li>
+							<a href="javascript:void(0);" data-tab="#tab-product-{{ module_id }}-{{ tab_count }}">
+								{% if tab.title_image %}
+                                    <img src="{{ tab.title_image }}" alt="{{ tab.title }}" />
+                                {% endif %}
+                                <span>{{ tab.title }}</span>
+							</a>
+						</li>
+						{% set tab_count = tab_count + 1 %}
+					{% endfor %}
+				</ul>
+			</div>
+		{% endif %}
+    </div>
+    <div class="pt-content">
+        {# Single Tab #}
+        {% if module_type == 'single_tab' %}
+            {% if single_products %}
+                {% if layout_type == 'slider' %}
+                    {% if product_layout_type == 'other' %}
+                    <div class="gallery-product">
+                    {% endif %}
+                    <div class="swiper-viewport">
+                        <div class="swiper-container single-slides-{{ module_id }}">
+                            <div class="swiper-wrapper">
+                                {% for product in single_products %}
+                                <div class="product-thumb transition swiper-slide">
+                                    {{ product.html }}
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% if slide.pagination %}
+                            <div class="swiper-pagination single-slides-pagination-{{ module_id }}"></div>
+                        {% endif %}
+
+                        {% if slide.navigation %}
+                            <div class="swiper-pager">
+                                <div class="swiper-button-next swiper-button-next-{{ module_id }}"></div>
+                                <div class="swiper-button-prev swiper-button-prev-{{ module_id }}"></div>
+                            </div>
+                        {% endif %}
+                    </div>
+                    {% if product_layout_type == 'other' %}
+                    </div>
+                    <div class="gallery-thumbs">
+                        <div class="swiper-viewport">
+                            <div class="swiper-container gallery-thumbs-{{ module_id }}">
+                                <div class="swiper-wrapper">
+                                    {% set i = 0 %}
+                                    {% for product in single_products %}
+                                        <div class="swiper-slide">
+                                            <div class="thumb-image">
+                                                <a href="javascript:void(0);" onclick="productGoToSlide({{ i }})"><img src="{{ product.thumb }}" alt="{{ product.name }}"></a>
+                                            </div>
+                                        </div>
+                                        {% set i = i + 1 %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+							<div class="swiper-pager pimg-navigation">
+								<div class="swiper-button-next pimg-button-next pimg-button-next-{{ module_id }}"></div>
+								<div class="swiper-button-prev pimg-button-prev pimg-button-prev-{{ module_id }}"></div>
+							</div>
+                        </div>
+                    </div>
+
+                    <script>
+                        $(".gallery-thumbs-{{ module_id }}").swiper({
+                            spaceBetween: 20,
+							nextButton: '.pimg-button-next-{{ module_id }}',
+							prevButton: '.pimg-button-prev-{{ module_id }}',
+							speed: 300,
+							slidesPerView: 3,
+							autoplay: false,
+							simulateTouch: false,
+							loop: false,
+							direction: 'vertical',
+							breakpoints: {
+								479: {
+								  slidesPerView: 5
+								},
+								767: {
+								  slidesPerView: 5
+								},
+								991: {
+								  slidesPerView: 6
+								  
+								},
+								1199: {
+								  slidesPerView: 3
+								  
+								}
+							}
+                        });
+
+                        function productGoToSlide(index) {
+                            product_slides_{{ module_id }}.slideTo(index);
+                        }
+						$('.gallery-thumbs .swiper-slide-active .thumb-image').addClass('active');
+						$('.gallery-thumbs .thumb-image').click(function(){
+							$('.gallery-thumbs .thumb-image').removeClass('active');
+							$(this).addClass('active');
+						});
+                    </script>
+                    {% endif %}
+                {% endif %}
+
+                {% if layout_type == 'large_item' %}
+                    <div class="row">
+                        <div class="col-md-4 col-sm-12">
+                            <div class="fproduct-content">
+                                <div class="product-thumb">
+                                    {{ single_first_product.html }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8 col-sm-12">
+                            <div class="swiper-viewport">
+                                <div class="swiper-container single-slides-{{ module_id }}">
+                                    <div class="swiper-wrapper">
+                                        {% for product in single_products_except_first %}
+                                            <div class="product-thumb transition swiper-slide">
+                                                {{ product.html }}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% if slide.pagination %}
+                                    <div class="swiper-pagination single-slides-pagination-{{ module_id }}"></div>
+                                {% endif %}
+
+                                {% if slide.navigation %}
+                                    <div class="swiper-pager">
+                                        <div class="swiper-button-next swiper-button-next-{{ module_id }}"></div>
+                                        <div class="swiper-button-prev swiper-button-prev-{{ module_id }}"></div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if layout_type == 'image' %}
+                    <div class="row">
+                        <div class="col-md-4 col-sm-5 col-sms-12">
+                            <div class="image-content">
+                                {% if single_image_link %}
+                                    <a href="{{ single_image_link }}">
+                                        <img src="{{ single_image }}" alt="" />
+                                    </a>
+                                {% else %}
+                                    <img src="{{ single_image }}" alt="" />
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-8 col-sm-7 col-sms-12">
+                            <div class="swiper-viewport">
+                                <div class="swiper-container single-slides-{{ module_id }}">
+                                    <div class="swiper-wrapper">
+                                        {% for product in single_products %}
+                                            <div class="product-thumb transition swiper-slide">
+                                                {{ product.html }}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% if slide.pagination %}
+                                    <div class="swiper-pagination single-slides-pagination-{{ module_id }}"></div>
+                                {% endif %}
+
+                                {% if slide.navigation %}
+                                    <div class="swiper-pager">
+                                        <div class="swiper-button-next swiper-button-next-{{ module_id }}"></div>
+                                        <div class="swiper-button-prev swiper-button-prev-{{ module_id }}"></div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <script>
+                    var product_slides_{{ module_id }} = $(".single-slides-{{ module_id }}").swiper({
+                        spaceBetween:0,
+                        {% if slide.pagination %}
+                        pagination: '.single-slides-pagination-{{ module_id }}',
+                        paginationClickable: true,
+                        {% endif %}
+                        {% if slide.navigation %}
+                        nextButton: '.swiper-button-next-{{ module_id }}',
+                        prevButton: '.swiper-button-prev-{{ module_id }}',
+                        {% endif %}
+                        speed: {% if slide.speed %} {{ slide.speed }} {% else %} 500 {% endif %},
+						preloadImages: false,
+						lazyLoading: true,
+						watchSlidesVisibility: true,
+                        slidesPerView: {{ slide.item_desktop }},
+                        slidesPerColumn: {{ slide.row_desktop }},
+                        breakpoints: {
+							1499: {
+								slidesPerView: {{ slide.item_laptop }},
+								slidesPerColumn: {{ slide.row_laptop }}
+							},
+							1199: {
+								slidesPerView: {{ slide.item_tablet }},
+								slidesPerColumn: {{ slide.row_tablet }}
+							},
+							991: {
+								slidesPerView: {{ slide.item_s_tablet }},
+								slidesPerColumn: {{ slide.row_s_tablet }}
+							},
+							767: {
+								slidesPerView: {{ slide.item_mobile }},
+								slidesPerColumn: {{ slide.row_mobile }}
+							},
+							479: {
+								slidesPerView: {{ slide.item_s_mobile }},
+								slidesPerColumn: {{ slide.row_s_mobile }}
+							}
+						},
+                        autoplay: {% if slide.auto %} 500 {% else %} false {% endif %},
+                        loop: false
+                    });
+                </script>
+            {% else %}
+                <p class="txt-empty">{{ text_empty }}</p>
+            {% endif %}
+        {% endif %}
+
+        {# Multi Tabs #}
+        {% if module_type == 'multi_tabs' %}
+        <div class="product-tabs-section">
+            <div class="tab-content product-tabs-content">
+                {% set tab_count = 0 %}
+                {% for tab in tabs %}
+                    <div class="tab-product" id="tab-product-{{ module_id }}-{{ tab_count }}">
+                        {% if tab.products %}
+                            {% if layout_type == 'slider' %}
+                                <div class="swiper-viewport">
+                                    <div id="{{ module_id }}-{{ tab_count }}-products-container" class="multi-slides-{{ module_id }}-{{ tab_count }} swiper-container">
+                                        <div class="swiper-wrapper">
+                                            {% for product in tab.products %}
+                                                <div class="product-thumb transition swiper-slide">
+                                                    {{ product.html }}
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    {% if slide.pagination %}
+                                        <div class="swiper-pagination multi-slides-pagination-{{ module_id }}-{{ tab_count }}"></div>
+                                    {% endif %}
+
+                                    {% if slide.navigation %}
+                                        <div class="swiper-pager">
+                                            <div class="swiper-button-next swiper-button-next-{{ module_id }}-{{ tab_count }}"></div>
+                                            <div class="swiper-button-prev swiper-button-prev-{{ module_id }}-{{ tab_count }}"></div>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+
+                            {% if layout_type == 'large_item' %}
+                                <div class="row">
+                                    <div class="col-md-4 col-sm-12">
+                                        <div class="fproduct-content">
+                                            <div class="product-thumb">
+                                                {{ tab['first_product'].html }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8 col-sm-12">
+                                        <div class="swiper-viewport">
+                                            <div id="{{ module_id }}-{{ tab_count }}-products-container" class="multi-slides-{{ module_id }}-{{ tab_count }} swiper-container">
+                                                <div class="swiper-wrapper">
+                                                    {% for product in tab.products_except_first %}
+                                                        <div class="product-thumb transition swiper-slide">
+                                                            {{ product.html }}
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                            {% if slide.pagination %}
+                                                <div class="swiper-pagination multi-slides-pagination-{{ module_id }}-{{ tab_count }}"></div>
+                                            {% endif %}
+
+                                            {% if slide.navigation %}
+                                                <div class="swiper-pager">
+                                                    <div class="swiper-button-next swiper-button-next-{{ module_id }}-{{ tab_count }}"></div>
+                                                    <div class="swiper-button-prev swiper-button-prev-{{ module_id }}-{{ tab_count }}"></div>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            {% if layout_type == 'image' %}
+                            <div class="row">
+                                <div class="col-md-9 col-sm-8 col-xs-12">
+                                    <div class="swiper-viewport">
+                                        <div id="{{ module_id }}-{{ tab_count }}-products-container" class="multi-slides-{{ module_id }}-{{ tab_count }} swiper-container">
+                                            <div class="swiper-wrapper">
+                                                {% for product in tab.products %}
+                                                    <div class="product-thumb transition swiper-slide">
+                                                        {{ product.html }}
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        {% if slide.pagination %}
+                                            <div class="swiper-pagination multi-slides-pagination-{{ module_id }}-{{ tab_count }}"></div>
+                                        {% endif %}
+
+                                        {% if slide.navigation %}
+                                            <div class="swiper-pager">
+                                                <div class="swiper-button-next swiper-button-next-{{ module_id }}-{{ tab_count }}"></div>
+                                                <div class="swiper-button-prev swiper-button-prev-{{ module_id }}-{{ tab_count }}"></div>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+								<div class="col-md-3 col-sm-4 col-xs-12">
+                                    <div class="image-content">
+                                        {% if tab.image['link'] %}
+                                            <div class="pt-block">
+												<div class="image">
+													<a href="{{ tab.image['link'] }}">
+														<img src="{{ tab.image['src'] }}" alt="{{ tab.image['link'] }}" />
+													</a>
+												</div>
+											</div>
+                                        {% else %}
+                                            <img src="{{ tab.image['src'] }}" alt="{{ tab.image['link'] }}" />
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            <script>
+                                $(".multi-slides-{{ module_id }}-{{ tab_count }}").swiper({
+                                    spaceBetween: 0,
+                                    {% if slide.pagination %}
+                                    pagination: '.multi-slides-pagination-{{ module_id }}-{{ tab_count }}',
+                                    paginationClickable: true,
+                                    {% endif %}
+                                    {% if slide.navigation %}
+                                    nextButton: '.swiper-button-next-{{ module_id }}-{{ tab_count }}',
+                                    prevButton: '.swiper-button-prev-{{ module_id }}-{{ tab_count }}',
+                                    {% endif %}
+                                    speed: {% if slide.speed %} {{ slide.speed }} {% else %} 500 {% endif %},
+									preloadImages: false,
+									lazyLoading: true,
+									watchSlidesVisibility: true,
+                                    slidesPerView: {{ slide.item_desktop }},
+                                    slidesPerColumn: {{ slide.row_desktop }},
+                                    breakpoints: {
+                                        1499: {
+                                            slidesPerView: {{ slide.item_laptop }},
+                                            slidesPerColumn: {{ slide.row_laptop }}
+                                        },
+										1199: {
+                                            slidesPerView: {{ slide.item_tablet }},
+                                            slidesPerColumn: {{ slide.row_tablet }}
+                                        },
+                                        991: {
+                                            slidesPerView: {{ slide.item_s_tablet }},
+                                            slidesPerColumn: {{ slide.row_s_tablet }}
+                                        },
+                                        767: {
+                                            slidesPerView: {{ slide.item_mobile }},
+                                            slidesPerColumn: {{ slide.row_mobile }}
+                                        },
+                                        479: {
+                                            slidesPerView: {{ slide.item_s_mobile }},
+                                            slidesPerColumn: {{ slide.row_s_mobile }}
+                                        }
+                                    },
+                                    autoplay: {% if slide.auto %} 500 {% else %} false {% endif %},
+                                    loop: false
+                                });
+                            </script>
+                        {% else %}
+                            <p class="txt-empty">{{ text_empty }}</p>
+                        {% endif %}
+                    </div>
+                    {% set tab_count = tab_count + 1 %}
+                {% endfor %}
+            </div>
+        </div>
+        <script>
+            $('.tabs-style .nav-tabs').each(function() {
+				$(this).find('li').first().addClass('active');
+			});
+			
+			
+            $('.product-tabs-section .tab-content').each(function() {
+				$(this).find('.tab-product').hide();
+				$(this).find('.tab-product').first().show();
+			}); 
+			
+            $('.tabs-style .nav-tabs a').on('click', function () {
+                $(this).closest('ul').find('li').removeClass('active');
+                $(this).closest('li').addClass('active');
+
+                var tab = $(this).data('tab');
+				$(tab).closest('.tab-content').find('.tab-product').hide();
+                $(tab).show();
+            });
+        </script>
+        {% endif %}
+    </div>
+</div>

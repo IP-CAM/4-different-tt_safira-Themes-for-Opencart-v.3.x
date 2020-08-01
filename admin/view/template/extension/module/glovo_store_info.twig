@@ -1,0 +1,461 @@
+{{ header }}{{ column_left }}
+<div id="content">
+    <div class="page-header">
+        <div class="container-fluid">
+            <div class="pull-right">
+                <button type="submit" form="form-shipping" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+                <a href="{{ url_back }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+            <h1>{{ heading_title }}</h1>
+            <ul class="breadcrumb">
+                {% for breadcrumb in breadcrumbs %}
+                    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="container-fluid">
+        {% if error_warning %}
+            <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endif %}
+
+        {% for key, message in alert_messages %}
+            {{ message }}
+        {% endfor %}
+
+        {#---------------------------------#}
+
+        <style>
+            .form-group {
+                border: none !important;
+                padding-top: 0.75rem;
+                padding-bottom: 0.75rem;
+            }
+            .form-horizontal .radio, .form-horizontal .checkbox {
+                font-size: 12px !important;
+            }
+
+            button.holiday-close i {
+                color: red !important;
+            }
+        </style>
+
+        <form action="{{ url_save }}" method="post" enctype="multipart/form-data" id="form-edit-city" class="form-horizontal">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><b>{{ text_configuration }}</b></h3>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-zoom">{{ text_status }}</label>
+                        <div class="col-sm-10">
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="active" {{ store.active ? 'checked' : '' }}> {{ text_enable }}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="currency_id">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-geo-zone">{{ text_currency }}</label>
+                        <div class="col-sm-10">
+                            <select name="currency_id" id="input-order-status" class="form-control">
+                                {% for currency in currencies %}
+                                    {% if currency.code == store.currencyId %}
+                                        <option value="{{ currency.code }}" selected="selected">{{ currency.title }}</option>
+                                    {% else %}
+                                        <option value="{{ currency.code }}">{{ currency.title }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><b>{{ text_delivery_addresses }}</b></h3>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-country_id">{{ text_country }}</label>
+                        <div class="col-sm-10">
+                            <select name="country_id" id="input-country_id" class="form-control">
+                                {% for country in countries %}
+                                    {% if country.country_id == store.countryId %}
+                                        <option value="{{ country.country_id }}" selected="selected">{{ country.name }}</option>
+                                    {% else %}
+                                        <option value="{{ country.country_id }}">{{ country.name }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-region-id">{{ text_city }}</label>
+                        <div class="col-sm-10">
+                            <select name="zone_id" id="input-region-id" class="form-control">
+                                {% for zone in states %}
+                                    {% if zone.zone_id == store.regionId %}
+                                        <option value="{{ zone.zone_id }}" selected="selected">{{ zone.name }}</option>
+                                    {% else %}
+                                        <option value="{{ zone.zone_id }}">{{ zone.name }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    {#<div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-region-id">{{ text_aita_code }}</label>
+                        <div class="col-sm-10">
+                            <select name="code" id="input-region-id" class="form-control">
+                                {% for aita in aita_codes %}
+                                    {% if aita.code == store.code %}
+                                        <option value="{{ aita.code}}" selected="selected">{{ aita.code }}</option>
+                                    {% else %}
+                                        <option value="{{ aita.code }}">{{ aita.code }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                            <div class="help">{{ text_find_aita_code }}</div>
+                        </div>
+                    </div>#}
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-address">{{ text_store_address }}</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="address" value="{{ store.address }}" id="input-address" class="form-control" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-details">{{ text_address_2 }}</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="address2" value="{{ store.address2 }}" id="input-details" class="form-control" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-details">{{ text_reference }}</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="details" value="{{ store.details }}" id="input-details" class="form-control" required />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-zoom">{{ text_postal_code }}</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="postal_code" id="postal_code" class="form-control" value="{{ store.postalCode }}" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-lat">{{ text_city_geo_lat }}</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="lat" value="{{ store.lat }}" id="input-lat" class="form-control" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-lng">{{ text_city_geo_lng }}</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="lng" value="{{ store.lng }}" id="input-lng" class="form-control" required />
+                            <div class="help">{{ text_find_lat_lng }}</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-radius">Radio</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="radius" value="{{ store.radius }}" id="input-radius" class="form-control" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-max_orders">Max Orders</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="max_orders" value="{{ store.maxOrders }}" id="input-max_orders" class="form-control" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-contact-person">{{ text_contact_person }}</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="contact_person" value="{{ store.contactPerson }}" id="input-contact-person" class="form-control" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-contact-phone">{{ text_contact_phone }}</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="contact_phone" value="{{ store.contactPhone}}" id="input-contact-phone" class="form-control" required />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {# Working Hours #}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><b>{{ text_working_hours }}</b></h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-10 col-lg-6">
+                            <table class="table table-condensed" id="working-table">
+                                {% for day in days %}
+                                    <tr style="border: none;">
+                                        <td class="col-4 col-md-4 text-left">
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" class="glovo_day" {{ day.status == 1 ? 'checked' : '' }}> &nbsp;<b>{{ day.name }}</b>
+                                                </label>
+                                            </div>
+                                        </td>
+                                        <td class="col-6 col-md-6 text-left">
+                                            <input type="text" class="timepicker text-center form-control fmtp glovo_day" value="{{ day.hour_start }}" readonly>
+                                            &nbsp;~&nbsp;
+                                            <input type="text" class="timepicker text-center form-control fmtp glovo_day" value="{{ day.hour_end }}" readonly>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-2 col-lg-6"></div>
+                    </div>
+
+                    <input type="hidden" name="city_hour" value="{{ store.working_times }}">
+
+                    {% if store.id %}
+                        <input type="hidden" name="store_id" value="{{ store.id }}">
+                    {% else %}
+                        <input type="hidden" name="store_id" value="0">
+                    {% endif %}
+                </div>
+            </div>
+
+            {# Holidays #}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><b>{{ text_holidays }}</b></h3>
+                </div>
+                <div class="panel-body">
+                    <p class="comment">{{ text_holiday_1 }} <a href="javascript:;" id="btnAddPage" role="button">{{ text_holiday_2 }}</a></p>
+
+                    <div class="col-xs-12 col-sm-12 col-md-10 col-lg-6">
+                        <table class="table table-condensed" id="table-holidays">
+                        </table>
+                    </div>
+
+                    <hr>
+                </div>
+                <input type="hidden" name="holidays" value="{{ store.holidays }}">
+            </div>
+
+            {# Schedule Hours #}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><b>Horas programadas</b></h3>
+                </div>
+                <div class="panel-body">
+
+                    <table class="table table-condensed">
+                        <thead>
+                        {% for day in schedule_hours.days %}
+                            <th class="text-center">{{ day.label }}</th>
+                        {% endfor %}
+                        </thead>
+                        <tbody>
+                        {% for key, value in schedule_hours.hours %}
+                            <tr class="text-center">
+                                {% for hour in value %}
+                                    <td class="text-center">
+                                        {{ hour.name }} ({{ hour.current_orders }}/{{ hour.max_orders }})
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <div class="col-xs-12 col-sm-12 col-md-10 col-lg-6">
+                        <table class="table table-condensed" id="table-schedule-hours">
+                        </table>
+                    </div>
+
+                    <hr>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<link href="../catalog/view/javascript/glovo/jquery.timepicker.min.css" type="text/css" rel="stylesheet" />
+<style>
+    .fmtp {
+        background-color: #fff !important;
+        display: inline !important;
+        width: auto;
+    }
+
+    input.timepicker, .form-compact {
+        width: 10rem !important;
+        height: 25px;
+        padding-top: 2px;
+        padding-bottom: 2px;
+    }
+
+    #working-table tr td, #table-holidays tr td{
+        border: none;
+    }
+    #table-holidays tr td {
+        padding-left: 0;
+    }
+    #table-holidays tr {
+        height: 30px !important;
+    }
+</style>
+<script type="text/javascript" src="../catalog/view/javascript/glovo/jquery.timepicker.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        if ('{{ store.countryId }}' == 0) {
+            $('#input-country_id > option:eq(1)').prop('selected', true);
+            updateSelectors($('#input-country_id').val());
+        }
+    });
+
+    function updateSelectors($countryId) {
+        $.ajax({
+            url: 'index.php?route=extension/shipping/glovo/get_zones&user_token={{ user_token }}&country_id=' + $countryId,
+            dataType: 'json',
+            beforeSend: function() {
+            },
+            complete: function() {
+            },
+            success: function(json) {
+                let html = '';
+
+                if (json['zone'] && json['zone'] != '') {
+                    for (i = 0; i < json['zone'].length; i++) {
+                        html += '<option value="' + json['zone'][i]['zone_id'] + '"';
+
+                        if (json['zone'][i]['zone_id'] == '{{ zone_id }}') {
+                            html += ' selected="selected"';
+                        }
+
+                        html += '>' + json['zone'][i]['name'] + '</option>';
+                    }
+                } else {
+                    html += '<option value="0" selected="selected">{{ text_none }}</option>';
+                }
+
+                $('select[name="zone_id"]').html(html);
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+            }
+        });
+    }
+
+    $('select[name="country_id"]').on('change', function () {
+        console.log('valor: ', $(this)[0].value);
+        updateSelectors($(this)[0].value);
+    });
+
+    $('.timepicker').timepicker({
+        timeFormat: 'HH:mm',
+        interval: 30,
+        minTime: '0',
+        startTime: '00:00',
+        maxTime: '23:30',
+        dynamic: false,
+        dropdown: true,
+        scrollbar: true,
+    });
+
+    $('#form-edit-city').on('submit', function() {
+        let values = [];
+        let holidays = [];
+        $('.glovo_day').each(function () {
+            if ($(this).is(':checkbox')) {
+                values.push($(this).is(':checked') ? 1 : 0);
+            } else {
+                values.push($(this).val());
+            }
+        });
+        $('#table-holidays tr').each(function () {
+            holidays.push($(this).find('input[type=text]').val());
+            holidays.push($(this).find('input[type=number]').val());
+            holidays.push($(this).find('select').val());
+        });
+
+        $('[name="city_hour"]').val(values.join(','));
+        $('[name="holidays"]').val(holidays.join(','));
+
+        return true;
+    });
+
+
+    function printSampleDayPicker(value) {
+        return `<input type="number" class="form-control form-compact fmtp" min="1" max="31" value="${value}" style="width: 7rem !important;" />`;
+    }
+    function printSampleMonthPicker(value, str = '<select class="form-control form-compact fmtp" style="width: 13rem !important;">') {
+        moment.locale('{{ lang_code }}');
+        for (let i = 1; i <= 12; i++) str += `<option value="${i}" ${i===value ? 'selected' : ''}>${moment.months()[i-1]}</option>`;
+
+        return str + `</select>`;
+    }
+
+    // ------------------------------------------------------------------------
+
+    var pageImages = [];
+    var pageNum = 0;
+
+    function reNumberPages() {
+        pageNum = 0;
+        var tabCount = $('#pageTab > li').length;
+        $('#pageTab > li').each(function() {
+            var pageId = $(this).children('a').attr('href');
+            if (pageId == "#page1") {
+                return true;
+            }
+            pageNum++;
+            $(this).children('a').html('Address ' + pageNum +
+                '<button class="close" type="button" ' +
+                'title="Remove this page">×</button>');
+        });
+    }
+
+    function appendHoliday(text, day, month) {
+        $('#table-holidays').append(`
+                <tr style="border: none;">
+                    <td class="col-4 col-md-4 text-left">
+                        <button type="button" class="close holiday-close pull-left"><i class="fa fa-trash text-danger" style="font-size: 1.3em; padding-right: 10px;"></i></button>
+                        <input type="text" class="form-control form-compact fmtp pull-right" value="${text}" style="width: 85% !important;" />
+                    </td>
+                    <td class="col-6 col-md-6 text-left">
+                        ${printSampleDayPicker(day)}
+                        &nbsp;~&nbsp;
+                        ${printSampleMonthPicker(month)}
+                    </td>
+                </tr>
+            `);
+    }
+
+    $(document).ready(function() {
+        /** Reload Holidays Saved from DB **/
+        {% for holiday in holidays %}
+            appendHoliday('{{ holiday.text }}', {{ holiday.day }}, {{ holiday.month }});
+        {% endfor %}
+
+        /** Add a Tab **/
+        $('#btnAddPage').click(function () {
+            pageNum++;
+
+            appendHoliday('Holiday', 1, 1);
+        });
+
+        $('#table-holidays').on('click', '.close', function() {
+            $(this).parents('tr')[0].remove();
+        });
+
+        $("#pageTab").on("click", 'a', function(e) {
+            e.preventDefault();
+            $(this).tab('show');
+        });
+    });
+</script>
+{{ footer }}

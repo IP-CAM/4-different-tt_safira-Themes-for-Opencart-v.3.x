@@ -1,0 +1,104 @@
+<!-- [20-07-20 by Ming] -> add card payment -->
+<div class="card-ui">
+    <h4 id="card-title">Ingresá los datos de la tarjeta</h4>
+    <div class="confirm-card">
+        <div class="row form-group">
+            <div class="col-md-4">
+                <lable for="serial_number">Número de serie : </lable>
+            </div>
+            <div class="col-md-5">
+                <input type="type" class="form-control input-card" id="serial-number" required autofocus/>
+                <span class="error-txt" id="error-serial"></span>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-4">
+                <lable for="security_number">Numero de seguridad : </lable>
+            </div>
+            <div class="col-md-5">
+                <input type="password" class="form-control input-card" id="security-number" required/>
+                <span class="error-txt" id="error-security"></span>
+            </div>
+        </div>
+    </div>
+</div>
+<span class="error-txt" id="error-paying"></span>
+<div class="buttons">
+  <div class="pull-right">
+    <input type="button" value="tarjeta de beneficios de pago" id="button-confirm" data-loading-text="{{ text_loading }}" class="btn btn-primary" />
+  </div>
+</div>
+<style>
+    .card-ui {
+        background: #eee;
+        padding: 1px 15px 30px;
+    }
+    .confirm-card {
+        background: #fff;
+        padding: 15px 15px 1px;
+    }
+    lable {
+        float: right;
+        font-weight: bold;
+        line-height: 2.3;
+    }
+    input.input-card {
+        float: left;
+    }
+    .error-txt {
+        color: red;
+        font-size: 14px;
+        margin-top: 3px;
+    }
+</style>
+<script type="text/javascript">
+
+$('#button-confirm').on('click', function() {
+    console.log('hello');
+    var serial_number = $('#serial-number').val();
+    var security_number = $('#security-number').val();
+
+    if (serial_number == '' || serial_number.length != 16) {
+        $('#error-serial').text('Ingrese su número de serie con 16 dígitos');
+        $('#serial_number').focus()
+    } else if (security_number == '') {
+        $('#error-serial').text('');
+        $('#security_number').focus();
+        $('#error-security').text('Ingrese su número de seguridad');
+    } else {
+        $('#error-serial').text('');
+        $('#error-security').text('');
+
+        $.ajax({
+            url: 'index.php?route=extension/payment/benifit_card/confirm',
+            dataType: 'json',
+            type: 'post',
+            data: {
+                serial_num : serial_number,
+                security_num : security_number,
+            },
+            beforeSend: function() {
+                $('#button-confirm').button('loading');
+            },
+            complete: function() {
+                $('#button-confirm').button('reset');
+            },
+            success: function(result) {
+                console.log(result);
+                // var result = JSON.parse(json);
+                if (result['status'] == 200) {
+                    location = result['redirect'];
+                    $('#serial-number').val('');
+                    $('#security-number').val('');	
+                } else if (result['status'] == 403) {
+                    $('#error-paying').text(result['warning']);
+                    $('#security-number').val('');
+                }
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+            }
+        });
+    }
+});
+</script>
