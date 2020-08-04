@@ -5,31 +5,32 @@
             <div class="col-md-6 row">
                 <div class="col-md-12">
                     <p>You have: {{ card_amount }}</p>
-                    <div class="form-group">
-                        <label for="benefit-amount" class="col-md-4">Use Benefit Amount</label>
-                        <div class="col-md-4">
+                    <div class="form-group row">
+                        <label for="benefit-amount" class="col-md-3">Use Amount:</label>
+                        <div class="col-md-3">
                             <input type="text" class="form-control" id="benefit-amount" name="benefit_amount" value="0" />
                         </div>
-                        <div class="col-md-4">
-                            <input type="checkbox" class="form-control" id="benefit-pay-full" name="pay_full" /> Pay the full cost by Benefit Card
+                        <div class="col-md-6">
+                            <input type="checkbox" id="benefit-pay-full" name="pay_full" /> Pay Full Cost
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 row form-group">
-                <div class="col-md-4">
-                    <lable for="serial_number">Número de serie : </lable>
+            <div class="col-md-6">
+                <div class="form-group row">
+                    <label class="col-md-4" for="serial_number">Número de serie : </label>
+                    <div class="col-md-8">
+                        <input type="type" class="form-control input-card" id="serial-number" required autofocus/>
+                        <span class="error-txt" id="error-serial"></span>
+                    </div>
                 </div>
-                <div class="col-md-8">
-                    <input type="type" class="form-control input-card" id="serial-number" required autofocus/>
-                    <span class="error-txt" id="error-serial"></span>
-                </div>
-                <div class="col-md-4">
-                    <lable for="security_number">Numero de seguridad : </lable>
-                </div>
-                <div class="col-md-5">
-                    <input type="password" class="form-control input-card" id="security-number" required/>
-                    <span class="error-txt" id="error-security"></span>
+
+                <div class="form-group row">
+                    <label class="col-md-4" for="security_number">Numero de seguridad : </label>
+                    <div class="col-md-8">
+                        <input type="password" class="form-control input-card" id="security-number" required/>
+                        <span class="error-txt" id="error-security"></span>
+                    </div>
                 </div>
             </div>
         </div>
