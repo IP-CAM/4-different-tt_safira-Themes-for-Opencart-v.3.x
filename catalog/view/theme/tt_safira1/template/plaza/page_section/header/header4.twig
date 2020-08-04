@@ -41,17 +41,17 @@
 					<li id="top-links" class="nav header-dropdown">
 					  <ul class="list-inline">
 						<li class="dropdown">
-						  <ul class="dropdown-menu dropdown-menu-right pt-account">
-							{% if logged %}
-							<li><a id="pt-logout-link" href="{{ logout }}">{{ text_logout }}</a></li>
-								{% if last_purchased %}
-									<li><a href="{{ last_purchased }}" id="vltech-last-purchased">{{ text_last_purchased }}</a></li>
+							<ul class="dropdown-menu dropdown-menu-right pt-account">
+								{% if logged %}
+									<li><a class="btn btn-cate" id="pt-logout-link" href="{{ logout }}">{{ text_logout }}</a></li>
+									{% if last_purchased %}
+										<li><a class="btn btn-cate" href="javascript:void(0);" onclick="cart.lastorder()" id="vltech-last-purchased">{{ text_last_purchased }}</a></li>
+									{% endif %}
+								{% else %}
+									<li><a class="btn btn-cate" id="pt-register-link" href="{{ register }}">{{ text_register }}</a></li>
+									<li><a class="btn btn-cate" id="pt-login-link" href="{{ login }}">{{ text_login }}</a></li>
 								{% endif %}
-							{% else %}
-							<li><a id="pt-register-link" href="{{ register }}">{{ text_register }}</a></li>
-							<li><a id="pt-login-link" href="{{ login }}">{{ text_login }}</a></li>
-							{% endif %}
-						  </ul>
+							</ul>
 						</li>
 					  </ul>
 					</li>
@@ -92,7 +92,7 @@ $(document).ready(function() {
 		if (day_temp == '07') {
 			$.post('index.php?route=plaza/header/initAmount', {
 				action: 'init_amount',
-			}, 
+			},
 			function(data) {
 				// console.log(data);
 				if(data['code'] == '200') {
