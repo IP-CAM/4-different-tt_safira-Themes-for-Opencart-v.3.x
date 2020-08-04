@@ -1,0 +1,70 @@
+<div class="card-ui">
+    <h4 id="card-title">Ingresá los datos de la tarjeta</h4>
+    <div class="confirm-card">
+        <div class="row form-group">
+            <div class="col-md-4">
+                <lable for="serial_number">Número de serie : </lable>
+            </div>
+            <div class="col-md-5">
+                <input type="type" class="form-control input-card" id="serial-number" required autofocus/>
+                <span class="error-txt" id="error-serial"></span>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-4">
+                <lable for="security_number">Numero de seguridad : </lable>
+            </div>
+            <div class="col-md-5">
+                <input type="password" class="form-control input-card" id="security-number" required/>
+                <span class="error-txt" id="error-security"></span>
+            </div>
+        </div>
+    </div>
+</div>
+<span class="error-txt" id="error-paying"></span>
+<div class="buttons">
+  <div class="pull-right">
+    <input type="button" value="{{ button_confirm }}" id="button-confirm" class="btn btn-primary" data-loading-text="{{ text_loading }}" />
+  </div>
+</div>
+<style>
+    .card-ui {
+        background: #eee;
+        padding: 1px 15px 30px;
+    }
+    .confirm-card {
+        background: #fff;
+        padding: 15px 15px 1px;
+    }
+    lable {
+        float: right;
+        font-weight: bold;
+        line-height: 2.3;
+    }
+    input.input-card {
+        float: left;
+    }
+    .error-txt {
+        color: red;
+        font-size: 14px;
+        margin-top: 3px;
+    }
+</style>
+<script type="text/javascript"><!--
+$('#button-confirm').on('click', function() {
+	$.ajax({
+		type: 'get',
+		url: 'index.php?route=extension/payment/benefit_card/confirm',
+		cache: false,
+		beforeSend: function() {
+			$('#button-confirm').button('loading');
+		},
+		complete: function() {
+			$('#button-confirm').button('reset');
+		},
+		success: function() {
+			location = '{{ continue }}';
+		}
+	});
+});
+//--></script>
