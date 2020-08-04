@@ -15,7 +15,7 @@ class ModelExtensionPaymentBenefitCard extends Model
 
         if($status) {
             $method_data = array(
-                'code'       => 'free_checkout',
+                'code'       => 'benefit_card',
                 'title'      => $this->language->get('text_title'),
                 'terms'      => '',
                 'sort_order' => $this->config->get('payment_benefit_card_sort_order')
