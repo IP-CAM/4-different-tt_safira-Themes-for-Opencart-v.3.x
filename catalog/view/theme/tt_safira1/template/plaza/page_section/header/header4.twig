@@ -43,13 +43,13 @@
 						<li class="dropdown">
 						  <ul class="dropdown-menu dropdown-menu-right pt-account">
 							{% if logged %}
-							<li><a class="btn btn-cate" id="pt-logout-link" href="{{ logout }}">{{ text_logout }}</a></li>
+							<li><a id="pt-logout-link" href="{{ logout }}">{{ text_logout }}</a></li>
 								{% if last_purchased %}
-									<li><a class="btn btn-cate" href="javascript:void(0);" onclick="cart.lastorder()" id="vltech-last-purchased">{{ text_last_purchased }}</a></li>
+									<li><a href="{{ last_purchased }}" id="vltech-last-purchased">{{ text_last_purchased }}</a></li>
 								{% endif %}
 							{% else %}
-							<li><a class="btn btn-cate" id="pt-register-link" href="{{ register }}">{{ text_register }}</a></li>
-							<li><a class="btn btn-cate" id="pt-login-link" href="{{ login }}">{{ text_login }}</a></li>
+							<li><a id="pt-register-link" href="{{ register }}">{{ text_register }}</a></li>
+							<li><a id="pt-login-link" href="{{ login }}">{{ text_login }}</a></li>
 							{% endif %}
 						  </ul>
 						</li>
@@ -62,7 +62,7 @@
 				<!-- [ 20-07-17 by Ming ] -> Benift Card Amount -->
 				{% if card_status == 1 %}
 				<div id="benift-card-amount">
-					<strong>Monto de tarjeta : $ {{ card_amount }}</strong>
+					<strong>Saldo disponible : $ <span id="card-amount">{{ card_amount }}</span></strong>
 				</div>
 				{% endif %}
 			</div>
@@ -79,3 +79,32 @@
 		</div>
 	</div>
 </header>
+<script>
+$(document).ready(function() {
+	// [20-04-08 by Ming] -> init card amount every seventh date
+	setInterval(function() {
+		var d = new Date();
+
+		var month = d.getMonth() + 1;
+		var day = d.getDate();
+		var day_temp = day > 9 ? day : '0' + day;
+
+		if (day_temp == '07') {
+			$.post('index.php?route=plaza/header/initAmount', {
+				action: 'init_amount',
+			}, 
+			function(data) {
+				// console.log(data);
+				if(data['code'] == '200') {
+					console.log('success');
+					$('#card-amount').text(data['initial_amount']);
+				} else {
+					console.log('failed');
+				}
+			}, 'json');
+		} else {
+			console.log('no seventh');
+		}
+    }, 3000);
+});
+</script>

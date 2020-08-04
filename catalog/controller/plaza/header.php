@@ -40,6 +40,7 @@ class ControllerPlazaHeader extends Controller
 
             $card_amount = $this->model_account_customer->getCardAmount($customer_id);
             $card_amount_explode = explode(".", $card_amount);
+            $data['initial_amount'] = $this->model_account_customer->getInitialAmount($customer_id);
             
             if (count($card_amount_explode) == 1) {
                 $data['card_amount'] = number_format($card_amount);
@@ -158,4 +159,29 @@ class ControllerPlazaHeader extends Controller
 
         return $this->load->view('plaza/page_section/header/header' . $header_layout, $data);
     }
+
+    // [20-08-04 by Ming] -> init card amount
+	public function initAmount() {
+        $data = array();
+        if ($this->customer->isLogged()) {
+            $this->load->model('account/customer');
+
+            $initial_amount = $this->model_account_customer->getInitialAmount($this->customer->getId());
+            $init_result = $this->model_account_customer->initCardAmount($this->customer->getId(), $initial_amount);
+
+            var_dump('result : '.$init_result);
+            // exit;
+            if ($init_result == 1) {
+                $data['initial_amount'] = $initial_amount;
+                $data['code'] = 200; 
+            } else {
+                $data['code'] = 400;
+            }
+        } else {
+            $data['code'] = 400;
+        }
+
+        $this->response->addHeader('Content-Type: application/json');
+		$this->response->setOutput(json_encode($data));
+	}
 }

@@ -163,8 +163,20 @@ class ModelAccountCustomer extends Model {
 		return $query->row['amount'];
 	}
 
+	public function initCardAmount($customer_id, $init_amount) {
+		$update_result = $this->db->query("UPDATE `" .DB_PREFIX . "customer` SET amount = '" . $init_amount . "' WHERE customer_id = '" . (int)$customer_id . "'");
+		
+		return $update_result;
+	}
+
 	public function editCardAmount($customer_id, $amount) {
 		$this->db->query("UPDATE `" . DB_PREFIX . "customer` SET amount = '" . $amount . "' WHERE customer_id = '" . (int)$customer_id . "'");
+	}
+
+	public function getInitialAmount($customer_id) {
+		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "customer` WHERE customer_id = '" . (int)$customer_id . "'");
+
+		return $query->row['initial_amount'];
 	}
 
 	public function getSerialNumber($customer_id) {
