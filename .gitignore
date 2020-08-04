@@ -5,3 +5,7 @@ index.php
 config.php
 admin/config.php
 admin/index.php
+.well-known/
+access.txt
+index.html
+logots.png
