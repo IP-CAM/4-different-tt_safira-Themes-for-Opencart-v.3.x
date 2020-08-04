@@ -6,6 +6,7 @@ config.php
 admin/config.php
 admin/index.php
 .well-known/
-access.txt
+acces.txt
 index.html
 logots.png
+.leechprotect-conf
