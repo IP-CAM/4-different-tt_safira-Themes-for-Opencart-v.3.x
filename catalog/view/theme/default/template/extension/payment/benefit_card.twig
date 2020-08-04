@@ -5,9 +5,32 @@
             <div class="col-md-6 row">
                 <div class="col-md-12">
                     <p>You have: {{ card_amount }}</p>
+                    <div class="form-group">
+                        <label for="benefit-amount" class="form-control col-md-4">Use Benefit Amount</label>
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" id="benefit-amount" name="benefit_amount" value="0" />
+                        </div>
+                        <div class="col-md-4">
+                            <input type="checkbox" class="form-control" id="benefit-pay-full" name="pay_full" /> Pay the full cost by Benefit Card
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6 row form-group">
+                <div class="col-md-4">
+                    <lable for="serial_number">Número de serie : </lable>
+                </div>
+                <div class="col-md-8">
+                    <input type="type" class="form-control input-card" id="serial-number" required autofocus/>
+                    <span class="error-txt" id="error-serial"></span>
+                </div>
+                <div class="col-md-4">
+                    <lable for="security_number">Numero de seguridad : </lable>
+                </div>
+                <div class="col-md-5">
+                    <input type="password" class="form-control input-card" id="security-number" required/>
+                    <span class="error-txt" id="error-security"></span>
+                </div>
             </div>
         </div>
     </div>
